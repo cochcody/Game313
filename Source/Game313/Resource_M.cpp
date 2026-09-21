@@ -1,10 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Resource_M.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/StaticMeshComponent.h"
 
-// Sets default values
 AResource_M::AResource_M()
 {
     PrimaryActorTick.bCanEverTick = true;
@@ -13,20 +11,17 @@ AResource_M::AResource_M()
     Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 
     RootComponent = Mesh;
-
     ResourceNameTxt->SetupAttachment(Mesh);
 }
 
-// Called when the game starts or when spawned
 void AResource_M::BeginPlay()
 {
     Super::BeginPlay();
 
-    tempText = tempText.FromString(resourceName);
+    tempText = FText::FromString(resourceName);
     ResourceNameTxt->SetText(tempText);
 }
 
-// Called every frame
 void AResource_M::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);

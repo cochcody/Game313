@@ -1,8 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
+#include "BuildingPart.h"
+#include "Resource_M.h"
 #include "PlayerChar.generated.h"
 
 UCLASS()
@@ -21,25 +23,10 @@ public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
     // Movement
-    UFUNCTION()
     void MoveForward(float AxisValue);
-
-    UFUNCTION()
     void MoveRight(float AxisValue);
-
-    UFUNCTION()
     void StartJump();
-
-    UFUNCTION()
     void StopJump();
-
-    // Resource detection
-    UFUNCTION()
-    void FindObject();
-
-    // Resource giving (declaration ONLY — no body here)
-    UFUNCTION()
-    void GiveResource(float amount, FString resourceType);
 
     // Camera
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -55,23 +42,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
     float Stamina = 100.0f;
 
-    // Resource counts
-    UPROPERTY(EditAnywhere, Category = "Resources")
-    int Wood;
-
-    UPROPERTY(EditAnywhere, Category = "Resources")
-    int Stone;
-
-    UPROPERTY(EditAnywhere, Category = "Resources")
-    int Berry;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-    TArray<int> ResourcesArray;
-
-    UPROPERTY(EditAnywhere, Category = "Resources")
-    TArray<FString> ResourcesNameArray;
-
-    // Stat setters
     UFUNCTION(BlueprintCallable)
     void SetHealth(float amount);
 
@@ -81,10 +51,52 @@ public:
     UFUNCTION(BlueprintCallable)
     void SetStamina(float amount);
 
+    UFUNCTION()
+    void DecreaseStats();
+
+    // Resource arrays
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+    TArray<int> ResourceArray;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building")
+    TArray<int> BuildingArray;
+
+    // Effects
+    UPROPERTY(EditAnywhere, Category = "Effects")
+    UParticleSystem* HitEffect;
+
     UPROPERTY(EditAnywhere, Category = "Effects")
     UMaterialInterface* hitDecal;
 
-
+    // Resource detection
     UFUNCTION()
-    void DecreaseStats();
+    void FindObject();
+
+    // Give resource
+    UFUNCTION()
+    void GiveResource(float amount, FString resourceType);
+
+    // Update resources after building
+    UFUNCTION(BlueprintCallable)
+    void UpdateResources(float woodAmount, float stoneAmount, FString buildingObject);
+
+    // Spawn building
+    UFUNCTION(BlueprintCallable)
+    void SpawnBuilding(int BuildingID, bool& isSuccess);
+
+    // Rotate building preview
+    UFUNCTION()
+    void RotateBuilding();
+
+    // Building mode flag
+    UPROPERTY()
+    bool bIsBuilding;
+
+    // Preview building part
+    UPROPERTY()
+    ABuildingPart* SpawnedPart;
+
+    // Building part class
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<class ABuildingPart> BuildingPartClass;
 };
