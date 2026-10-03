@@ -35,6 +35,9 @@ void APlayerChar::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    PlayerUI->UpdateBars(Health, Hunger, Stamina);
+
+
     if (bIsBuilding && SpawnedPart)
     {
         FVector StartLocation = PlayerCamComp->GetComponentLocation();
@@ -105,6 +108,12 @@ void APlayerChar::FindObject()
 
         if (HitResource)
         {
+            // ⭐ STAMINA ONLY GOES DOWN WHEN YOU SUCCESSFULLY HIT A RESOURCE
+            if (Stamina > 0)
+            {
+                SetStamina(-10.0f);
+            }
+
             FString HitName = HitResource->resourceName;
             int resourceValue = HitResource->resourceAmount;
 
@@ -138,6 +147,7 @@ void APlayerChar::FindObject()
         bIsBuilding = false;
     }
 }
+
 
 void APlayerChar::GiveResource(float amount, FString resourceType)
 {
@@ -182,20 +192,26 @@ void APlayerChar::SetHunger(float amount)
 
 void APlayerChar::SetStamina(float amount)
 {
-    if (Stamina + amount < 100)
-        Stamina += amount;
+    Stamina = FMath::Clamp(Stamina + amount, 0.0f, 100.0f);
 }
+
 
 void APlayerChar::DecreaseStats()
 {
+    // Hunger drains until it hits 0
     if (Hunger > 0)
+    {
         SetHunger(-1.0f);
+    }
 
-    SetStamina(10.0f);
 
-    if (Hunger <= 0)
+    // Health drains ONLY when hunger is empty
+    if (Hunger <= 0 && Health > 0)
+    {
         SetHealth(-3.0f);
+    }
 }
+
 
 void APlayerChar::UpdateResources(float woodAmount, float stoneAmount, FString buildingObject)
 {

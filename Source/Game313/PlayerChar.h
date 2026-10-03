@@ -1,11 +1,15 @@
 ﻿#pragma once
 
+#pragma once
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "BuildingPart.h"
 #include "Resource_M.h"
-#include "PlayerChar.generated.h"
+#include "PlayerWidget.h"        // ✔ MUST be BEFORE generated.h
+
+#include "PlayerChar.generated.h" // ✔ MUST be LAST
 
 UCLASS()
 class GAME313_API APlayerChar : public ACharacter
@@ -95,6 +99,10 @@ public:
     // Preview building part
     UPROPERTY()
     ABuildingPart* SpawnedPart;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPlayerWidget* PlayerUI;
+
 
     // Building part class
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
