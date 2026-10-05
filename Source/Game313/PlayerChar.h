@@ -9,6 +9,8 @@
 #include "Resource_M.h"
 #include "PlayerWidget.h"        // ✔ MUST be BEFORE generated.h
 
+#include "ObjectiveWidget.h"
+
 #include "PlayerChar.generated.h" // ✔ MUST be LAST
 
 UCLASS()
@@ -102,6 +104,15 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UPlayerWidget* PlayerUI;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UObjectiveWidget* objWidget;
+
+    UPROPERTY()
+    float objectsBuilt;
+
+    UPROPERTY()
+    float matsCollected;
 
 
     // Building part class
